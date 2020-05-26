@@ -1,0 +1,22 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+django-debug-toolbar = "*"
+pytest-django = "*"
+
+[packages]
+psycopg2-binary = "*"
+django = "*"
+django-extensions = "*"
+djangorestframework = "*"
+django-filter = "*"
+django-cors-headers = "*"
+drf-yasg = "*"
+djangorestframework-camel-case = "*"
+dj-rest-auth = {extras = ["with_social"],version = "*"}
+
+[requires]
+python_version = "3.8"
