@@ -20,3 +20,9 @@ dj-rest-auth = {extras = ["with_social"],version = "*"}
 
 [requires]
 python_version = "3.8"
+
+[scripts]
+makemigrations = "python manage.py makemigrations"
+migrate = "python manage.py migrate"
+runserver = "python manage.py runserver"
+shell_plus = "python manage.py shell_plus"

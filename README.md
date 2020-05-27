@@ -3,11 +3,11 @@
 ## Setup development environment
 
 1. Create `.env` file and set the following variables in it:
-    * DATABASE_NAME
-    * DATABASE_USER
-    * DATABASE_PASSWORD
-    * DATABASE_HOST
-    * DATABASE_PORT
+    * `DATABASE_NAME`
+    * `DATABASE_USER`
+    * `DATABASE_PASSWORD`
+    * `DATABASE_HOST`
+    * `DATABASE_PORT`
 1. `sudo -u postgres psql`
 1. Run the following queries against your PostgreSQL database:
     ```sql
@@ -25,3 +25,7 @@
 1. `pipenv install --dev`
 1. `pipenv run python manage.py migrate`
 1. `pipenv run python manage.py runserver`
+
+## Setup production environment
+
+TODO: `CORS_ORIGIN_WHITELIST`
