@@ -16,7 +16,8 @@ django-filter = "*"
 django-cors-headers = "*"
 drf-yasg = "*"
 djangorestframework-camel-case = "*"
-dj-rest-auth = {extras = ["with_social"],version = "*"}
+djoser = "*"
+djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "3.8"

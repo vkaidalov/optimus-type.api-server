@@ -20,6 +20,7 @@ urlpatterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0),  # noqa
             name='schema-json'),
+    # TODO: Try setting v1.0.
     path('swagger/',
          schema_view.with_ui('swagger', cache_timeout=0),  # noqa
          name='schema-swagger-ui'),
@@ -27,7 +28,12 @@ urlpatterns = [
          schema_view.with_ui('redoc', cache_timeout=0),  # noqa
          name='schema-redoc'),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken')),
+    path('auth/', include('djoser.urls.jwt'))
+
+    # TODO: Don't forget to set version namespaces (v1.0)!
 ]
 
 if settings.DEBUG:

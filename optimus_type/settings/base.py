@@ -3,6 +3,7 @@ import os
 from django.core.exceptions import ImproperlyConfigured
 
 
+# TODO: Consider switching to django-environ library.
 def get_env_value(env_variable):
     try:
         return os.environ[env_variable]
@@ -34,18 +35,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
-    'debug_toolbar',
     'django_extensions',
     'django_filters',
-    'drf_yasg',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'drf_yasg',
 
     'users.apps.UsersConfig'
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,7 +133,20 @@ AUTH_USER_MODEL = 'users.User'
 
 
 # DRF settings
+
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # TODO: Consider turning off this class.
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
         'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
@@ -143,4 +157,28 @@ REST_FRAMEWORK = {
         'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
     ),
+}
+
+
+# django-rest-framework-simplejwt settings
+
+# TODO: Consider moving to JWT on frontend and configuring settings here.
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+}
+
+
+# drf-yasg settings
+
+# TODO: Try to completely turn off session auth in Swagger UI.
+SWAGGER_SETTINGS = {
+    # 'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        # TODO: Repair this.
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
