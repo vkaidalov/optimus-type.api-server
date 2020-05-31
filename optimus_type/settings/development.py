@@ -6,7 +6,7 @@ from .base import *
 INSTALLED_APPS = INSTALLED_APPS + ['debug_toolbar']
 
 MIDDLEWARE = [
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ] + MIDDLEWARE
 
 # Required for django-debug-toolbar
