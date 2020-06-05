@@ -5,10 +5,11 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Optimus Type API",
-        default_version='v1',
+        default_version='v1.0',
         description="TODO: description",
         license=openapi.License(name="MIT License")
     ),
@@ -20,7 +21,7 @@ urlpatterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0),  # noqa
             name='schema-json'),
-    path('swagger/',
+    re_path('(?P<version>(v1.0))/swagger/',
          schema_view.with_ui('swagger', cache_timeout=0),  # noqa
          name='schema-swagger-ui'),
     path('redoc/',
@@ -32,7 +33,7 @@ urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
     path('auth/', include('djoser.urls.jwt')),
 
-    path('', include('exercises.urls'))
+    re_path(r'(?P<version>(v1.0))/', include('exercises.urls'))
 ]
 
 if settings.DEBUG:
