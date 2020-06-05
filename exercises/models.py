@@ -1,6 +1,7 @@
 from django.db import models
 
 from users.models import User
+from . import constants
 
 
 class Exercise(models.Model):
@@ -11,33 +12,9 @@ class Exercise(models.Model):
     )
 
     LOCALE_CHARSETS = {
-        "enUS": "`1234567890-=\\"
-                "qwertyuiop[]"
-                "asdfghjkl;'"
-                "zxcvbnm,./"
-                "~!@#$%^&*()_+|"
-                "QWERTYUIOP{}"
-                "ASDFGHJKL:\""
-                "ZXCVBNM<>?"
-                " \n",
-        "ukUA": "'1234567890-=ґ"
-                "йцукенгшщзхї"
-                "фівапролджє"
-                "ячсмитьбю."
-                "ʼ!\"№;%:?*()_+Ґ"
-                "ЙЦУКЕНГШЩЗХЇ"
-                "ФІВАПРОЛДЖЄ"
-                "ЯЧСМИТЬБЮ,"
-                " \n",
-        "ruRU": "ё1234567890-=\\"
-                "йцукенгшщзхъ"
-                "фывапролджэ"
-                "ячсмитьбю."
-                "Ё!\"№;%:?*()_+/"
-                "ЙЦУКЕНГШЩЗХЪ"
-                "ФЫВАПРОЛДЖЭ"
-                "ЯЧСМИТЬБЮ,"
-                " \n"
+        "enUS": constants.EN_US_CHARSET,
+        "ukUA": constants.UK_UA_CHARSET,
+        "ruRU": constants.RU_RU_CHARSET
     }
 
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
