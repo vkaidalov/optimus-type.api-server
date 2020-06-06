@@ -42,9 +42,20 @@ class AttemptExerciseSerializer(serializers.ModelSerializer):
         read_only_fields = ('title', 'locale')
 
 
-class AttemptSerializer(serializers.ModelSerializer):
+class AttemptListItemSerializer(serializers.ModelSerializer):
     creator = CreatorSerializer(read_only=True)
     exercise = AttemptExerciseSerializer(read_only=True)
+
+    class Meta:
+        model = Attempt
+        fields = (
+            'id', 'creator', 'exercise', 'created_at', 'layout',
+            'time_spent', 'mistakes'
+        )
+        read_only_fields = fields
+
+
+class AttemptDetailSerializer(AttemptListItemSerializer):
     exercise_id = serializers.PrimaryKeyRelatedField(
         queryset=Exercise.objects.filter(is_banned=False, is_removed=False),
         write_only=True, source='exercise'
@@ -57,15 +68,14 @@ class AttemptSerializer(serializers.ModelSerializer):
         max_length=Attempt.MAX_MISTAKES, allow_blank=True
     )
 
-    class Meta:
+    class Meta(AttemptListItemSerializer.Meta):
         model = Attempt
-        fields = (
-            'id', 'creator', 'exercise_id', 'exercise', 'created_at', 'layout',
-            'input_time_logs', 'time_spent', 'mistake_time_logs',
-            'mistake_char_logs'
+        fields = AttemptListItemSerializer.Meta.fields + (
+            'exercise_id', 'input_time_logs',
+            'mistake_time_logs', 'mistake_char_logs',
         )
         read_only_fields = (
-            'id', 'creator', 'exercise', 'created_at', 'time_spent'
+            'id', 'creator', 'exercise', 'created_at', 'time_spent', 'mistakes'
         )
 
     def validate_input_time_logs(self, value):  # noqa

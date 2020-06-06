@@ -66,3 +66,7 @@ class Attempt(models.Model):
 
     def __str__(self):
         return self.created_at
+
+    @property
+    def mistakes(self) -> int:
+        return len(self.mistake_char_logs)

@@ -7,7 +7,9 @@ from rest_framework import permissions
 from rest_framework import filters
 
 from .models import Exercise, Attempt
-from .serializers import ExerciseSerializer, AttemptSerializer
+from .serializers import (
+    ExerciseSerializer, AttemptListItemSerializer, AttemptDetailSerializer
+)
 from .permissions import IsCreatorOrReadOnly
 
 
@@ -70,13 +72,17 @@ class AttemptViewSet(
         creator__is_active=True,
         exercise__is_banned=False, exercise__is_removed=False
     )
-    serializer_class = AttemptSerializer
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly, IsCreatorOrReadOnly
     )
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filterset_fields = ('creator', 'exercise', 'layout')
     ordering_fields = ('created_at', 'time_spent')
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return AttemptListItemSerializer
+        return AttemptDetailSerializer
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
