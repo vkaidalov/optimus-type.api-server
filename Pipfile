@@ -20,6 +20,9 @@ drf-yasg = "*"
 djangorestframework-camel-case = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
+django-heroku = "*"
+gunicorn = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.8"

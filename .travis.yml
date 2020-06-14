@@ -3,24 +3,33 @@ dist: bionic
 language: python
 python: 3.8
 services:
-  - postgresql
+- postgresql
 addons:
   postgresql: '11'
 env:
   global:
-    - PIP_CACHE_DIR=$HOME/.cache/pip
-    - PIPENV_CACHE_DIR=$HOME/.cache/pipenv
+  - PIP_CACHE_DIR=$HOME/.cache/pip
+  - PIPENV_CACHE_DIR=$HOME/.cache/pipenv
 cache:
   directories:
-    - $PIP_CACHE_DIR
-    - $PIPENV_CACHE_DIR
+  - "$PIP_CACHE_DIR"
+  - "$PIPENV_CACHE_DIR"
 install:
-  - pip install pipenv
-  - pipenv install --deploy --ignore-pipfile --dev
+- pip install pipenv
+- pipenv install --deploy --ignore-pipfile --dev
 before_script:
-  - psql -U postgres -f setup_db_and_user_for_travis.sql
-  - pipenv run migrate
+- psql -U postgres -f setup_db_and_user_for_travis.sql
+- pipenv run migrate
 script:
-  - pipenv run pytest --cov=.
+- pipenv run pytest --cov=.
 after_success:
-  - codecov
+- codecov
+deploy:
+  provider: heroku
+  api_key:
+    secure: Cid5rXbxhmvDYDMhst3pba9Nuzy6ywPirzeTczncSuc5Oq3EEn5knPQ6XFMZ9aDP/sET+zcYIfMTaCtc/yxbTbSB2qaft1bjfjde9SU86QHSg7dy0juKQeifnDjxeiGXN/P517Bj8inkBkla1p7dK3rOKXJCt7VTlKBXYaB718EhWWmGFIDor92HmxkQ0lLH57HCtxwmN2oa3ewK0PbFOU7plvkU2Vnzx41/1Xl6dgPjqGfBZ03S/oaK94vvXI5Ma1CVuQtML6ux7wj202vPp4JbGZYOc5ErMyFZuzLHZSNkP6TfvgwLF0hh3+LoSa4OVgF0GHgb9N28qHOEzYQHXLXy5uikFv7u5zhAu72SVSgWvJDIyx2a+33nJgTaVxy1gugG2l/WuaI+6NPge5lHPDc7xDX8pXJI79juAEN6couNQpyyI51PB31V7dP/u59vndYBwoNTdU43pzpZPaWeEWagf6gnJRqG/T8ZZef26jxg764xooGi/FNCP1lhkVXEe9NF5cdLki7LjL3yG/OVPyZuRr3Z7pyraSnhmA8OhMKebHfBhKDCjRCLy8sX39BDrm9/VxmTvQBE7uJBciDJhyJAjMeEsTwBT94jC9Vhp6YVm77AL2smCKBSi7prgdFOxWReQehoxPzgVYCvRP5Pe8+I7oPpFIkq90TigaBwzK4=
+  app: optimus-type
+  run: "pipenv run migrate"
+  on:
+    branch: prod/heroku
+
