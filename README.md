@@ -1,5 +1,8 @@
 # optimus-type.api-server
 
+[![Build Status](https://travis-ci.org/hesoyam11/optimus-time.api-server.svg?branch=master)](https://travis-ci.org/hesoyam11/optimus-type.api-server)
+[![codecov](https://codecov.io/gh/hesoyam11/optimus-type.api-server/branch/master/graph/badge.svg)](https://codecov.io/gh/hesoyam11/optimus-type.api-server)
+
 ## Setup development environment
 
 1. Create `.env` file and set the following variables in it:

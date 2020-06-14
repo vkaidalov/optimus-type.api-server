@@ -4,10 +4,12 @@ from django.core.exceptions import ImproperlyConfigured
 
 
 # TODO: Consider switching to django-environ library.
-def get_env_value(env_variable):
+def get_env_value(env_variable, default=None):
     try:
         return os.environ[env_variable]
     except KeyError:
+        if default is not None:
+            return default
         error_msg = 'Set the {} environment variable'.format(env_variable)
         raise ImproperlyConfigured(error_msg)
 
@@ -83,11 +85,11 @@ WSGI_APPLICATION = 'optimus_type.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': get_env_value('DATABASE_NAME'),
-        'USER': get_env_value('DATABASE_USER'),
-        'PASSWORD': get_env_value('DATABASE_PASSWORD'),
-        'HOST': get_env_value('DATABASE_HOST'),
-        'PORT': int(get_env_value('DATABASE_PORT')),
+        'NAME': get_env_value('DATABASE_NAME', 'optimus_type'),
+        'USER': get_env_value('DATABASE_USER', 'optimus_type_admin'),
+        'PASSWORD': get_env_value('DATABASE_PASSWORD', 'optimus_type'),
+        'HOST': get_env_value('DATABASE_HOST', '127.0.0.1'),
+        'PORT': int(get_env_value('DATABASE_PORT', '5432')),
     }
 }
 
