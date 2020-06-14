@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 django-debug-toolbar = "*"
 pytest-django = "*"
+pytest-cov = "*"
 
 [packages]
 psycopg2-binary = "*"
