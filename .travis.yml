@@ -22,3 +22,5 @@ before_script:
   - pipenv run migrate
 script:
   - pipenv run pytest --cov=.
+after_success:
+  - codecov
