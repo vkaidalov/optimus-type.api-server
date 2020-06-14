@@ -135,6 +135,17 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.User'
 
 
+# Djoser settings
+
+DJOSER = {
+    'SERIALIZERS': {
+        # Substituted in order to fix drf_yasg ref_name's collision.
+        'user': 'users.serializers.AuthUserSerializer',
+        'current_user': 'users.serializers.AuthUserSerializer',
+    }
+}
+
+
 # DRF settings
 
 REST_FRAMEWORK = {

@@ -33,7 +33,8 @@ urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
     path('auth/', include('djoser.urls.jwt')),
 
-    re_path(r'(?P<version>(v1.0))/', include('exercises.urls'))
+    re_path(r'(?P<version>(v1.0))/', include('exercises.urls')),
+    re_path(r'(?P<version>(v1.0))/', include('users.urls'))
 ]
 
 if settings.DEBUG:

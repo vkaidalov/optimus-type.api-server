@@ -1,10 +1,7 @@
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import mixins
-from rest_framework import viewsets
-from rest_framework import permissions
-from rest_framework import filters
+from rest_framework import mixins, viewsets, permissions, filters
 
 from .models import Exercise, Attempt
 from .serializers import (
