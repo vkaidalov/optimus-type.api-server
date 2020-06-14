@@ -32,8 +32,9 @@ class ExerciseViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet
 ):
-    queryset = Exercise.objects.select_related('creator')\
-        .filter(creator__is_active=True, is_banned=False, is_removed=False)
+    queryset = Exercise.objects.select_related('creator').filter(
+        creator__is_active=True, is_banned=False, is_removed=False
+    )
     serializer_class = ExerciseSerializer
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly, IsCreatorOrReadOnly

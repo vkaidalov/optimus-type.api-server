@@ -14,7 +14,7 @@ class CreatorSerializer(serializers.ModelSerializer):
 
 
 class ExerciseSerializer(serializers.ModelSerializer):
-    creator = CreatorSerializer()
+    creator = CreatorSerializer(read_only=True)
 
     class Meta:
         model = Exercise
