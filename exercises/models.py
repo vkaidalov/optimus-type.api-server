@@ -18,13 +18,15 @@ class Exercise(models.Model):
         "ruRU": constants.RU_RU_CHARSET
     }
 
+    CONTENT_MAX_LENGTH = 4096
+
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     is_banned = models.BooleanField(default=False)
     is_removed = models.BooleanField(default=False)
     locale = models.CharField(max_length=4, choices=LOCALES)
     title = models.CharField(max_length=128)
-    content = models.CharField(max_length=4096)
+    content = models.CharField(max_length=CONTENT_MAX_LENGTH)
 
     class Meta:
         ordering = ('-created_at',)
@@ -53,7 +55,7 @@ class Attempt(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     layout = models.CharField(max_length=6, choices=LAYOUTS)
     input_time_logs = ArrayField(
-        models.PositiveIntegerField(), size=4096
+        models.PositiveIntegerField(), size=Exercise.CONTENT_MAX_LENGTH
     )
     time_spent = models.PositiveIntegerField()
     mistake_time_logs = ArrayField(

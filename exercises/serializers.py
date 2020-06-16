@@ -15,6 +15,10 @@ class CreatorSerializer(serializers.ModelSerializer):
 
 class ExerciseSerializer(serializers.ModelSerializer):
     creator = CreatorSerializer(read_only=True)
+    content = serializers.CharField(
+        max_length=Exercise.CONTENT_MAX_LENGTH,
+        trim_whitespace=False
+    )
 
     class Meta:
         model = Exercise
@@ -65,7 +69,8 @@ class AttemptDetailSerializer(AttemptListItemSerializer):
         max_length=Attempt.MAX_MISTAKES
     )
     mistake_char_logs = serializers.CharField(
-        max_length=Attempt.MAX_MISTAKES, allow_blank=True
+        max_length=Attempt.MAX_MISTAKES, allow_blank=True,
+        trim_whitespace=False
     )
 
     class Meta(AttemptListItemSerializer.Meta):
@@ -130,5 +135,5 @@ class AttemptDetailSerializer(AttemptListItemSerializer):
     def create(self, validated_data):
         # Set the `time_spent` field on the server side.
         input_time_logs: List[int] = validated_data['input_time_logs']
-        time_spent = input_time_logs[-1]
+        time_spent = input_time_logs[-1] - input_time_logs[0]
         return Attempt.objects.create(time_spent=time_spent, **validated_data)
