@@ -64,8 +64,8 @@ class Attempt(models.Model):
     class Meta:
         ordering = ('-created_at',)
 
-    def __str__(self):
-        return self.created_at
+    def __str__(self) -> str:
+        return str(self.created_at)
 
     @property
     def mistakes(self) -> int:
