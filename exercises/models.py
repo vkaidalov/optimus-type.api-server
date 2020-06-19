@@ -18,7 +18,7 @@ class Exercise(models.Model):
         "ruRU": constants.RU_RU_CHARSET
     }
 
-    CONTENT_MAX_LENGTH = 4096
+    CONTENT_MAX_LENGTH = 1024
 
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
