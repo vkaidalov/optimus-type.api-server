@@ -41,7 +41,7 @@ class ExerciseViewSet(
     )
     filterset_fields = ('creator', 'locale')
     search_fields = ('title',)
-    ordering_fields = ('created_at', 'title')
+    ordering_fields = ('created_at', 'title', 'attempt_counter')
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)

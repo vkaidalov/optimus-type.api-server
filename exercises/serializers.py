@@ -1,5 +1,7 @@
 from typing import List
 
+from django.db import transaction
+from django.db.models import F
 from rest_framework import serializers
 
 from users.models import User
@@ -22,8 +24,9 @@ class ExerciseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exercise
-        fields = ('id', 'creator', 'created_at', 'locale', 'title', 'content')
-        read_only_fields = ('id', 'creator', 'created_at')
+        fields = ('id', 'creator', 'created_at', 'locale',
+                  'title', 'content', 'attempt_counter')
+        read_only_fields = ('id', 'creator', 'created_at', 'attempt_counter')
 
     def validate(self, attrs):
         locale = attrs['locale']
@@ -136,4 +139,12 @@ class AttemptDetailSerializer(AttemptListItemSerializer):
         # Set the `time_spent` field on the server side.
         input_time_logs: List[int] = validated_data['input_time_logs']
         time_spent = input_time_logs[-1] - input_time_logs[0]
-        return Attempt.objects.create(time_spent=time_spent, **validated_data)
+
+        exercise: Exercise = validated_data['exercise']
+        exercise.attempt_counter = F('attempt_counter') + 1
+
+        with transaction.atomic():
+            exercise.save()
+            attempt = Attempt.objects.create(time_spent=time_spent, **validated_data)
+
+        return attempt

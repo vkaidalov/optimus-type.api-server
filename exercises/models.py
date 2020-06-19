@@ -27,6 +27,7 @@ class Exercise(models.Model):
     locale = models.CharField(max_length=4, choices=LOCALES)
     title = models.CharField(max_length=128)
     content = models.CharField(max_length=CONTENT_MAX_LENGTH)
+    attempt_counter = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ('-created_at',)
