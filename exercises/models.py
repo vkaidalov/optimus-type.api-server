@@ -73,3 +73,22 @@ class Attempt(models.Model):
     @property
     def mistakes(self) -> int:
         return len(self.mistake_char_logs)
+
+
+class FastestAttempt(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+    attempt = models.ForeignKey(Attempt, on_delete=models.CASCADE)
+    time_spent = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ('time_spent',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=['creator', 'exercise'],
+                name='unique_fastest_attempt'
+            )
+        ]
+
+    def __str__(self) -> str:
+        return str(self.time_spent)

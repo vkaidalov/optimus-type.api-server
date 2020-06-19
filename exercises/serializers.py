@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 from users.models import User
 from . import validators
-from .models import Exercise, Attempt
+from .models import Exercise, Attempt, FastestAttempt
 
 
 class CreatorSerializer(serializers.ModelSerializer):
@@ -143,8 +143,33 @@ class AttemptDetailSerializer(AttemptListItemSerializer):
         exercise: Exercise = validated_data['exercise']
         exercise.attempt_counter = F('attempt_counter') + 1
 
+        creator: User = validated_data['creator']
+        try:
+            fastest_attempt = FastestAttempt.objects.get(
+                creator=creator, exercise=exercise
+            )
+        except FastestAttempt.DoesNotExist:
+            fastest_attempt = FastestAttempt(
+                creator=creator, exercise=exercise, time_spent=time_spent
+            )
+
         with transaction.atomic():
             exercise.save()
             attempt = Attempt.objects.create(time_spent=time_spent, **validated_data)
+            # Save only if it is the new record or
+            # if it is the first record at all.
+            if time_spent <= fastest_attempt.time_spent:
+                fastest_attempt.time_spent = time_spent
+                fastest_attempt.attempt = attempt
+                fastest_attempt.save()
 
         return attempt
+
+
+class FastestAttemptSerializer(serializers.ModelSerializer):
+    creator = CreatorSerializer(read_only=True)
+
+    class Meta:
+        model = FastestAttempt
+        fields = ('id', 'creator', 'exercise', 'time_spent')
+        read_only_fields = fields
