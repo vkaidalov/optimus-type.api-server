@@ -3,9 +3,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets, permissions, filters
 
-from .models import Exercise, Attempt
+from .models import Exercise, Attempt, FastestAttempt
 from .serializers import (
-    ExerciseSerializer, AttemptListItemSerializer, AttemptDetailSerializer
+    ExerciseSerializer,
+    AttemptListItemSerializer,
+    AttemptDetailSerializer,
+    FastestAttemptSerializer
 )
 from .permissions import IsCreatorOrReadOnly
 
@@ -84,3 +87,20 @@ class AttemptViewSet(
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
+
+
+@method_decorator(
+    name='list', decorator=swagger_auto_schema(tags=['attempts'])
+)
+@method_decorator(
+    name='retrieve', decorator=swagger_auto_schema(tags=['attempts'])
+)
+class FastestAttemptViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = FastestAttempt.objects.select_related('creator').filter(
+        creator__is_active=True
+    )
+    serializer_class = FastestAttemptSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filterset_fields = ('exercise',)
+    ordering_fields = ('time_spent',)
