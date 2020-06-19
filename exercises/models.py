@@ -18,7 +18,7 @@ class Exercise(models.Model):
         "ruRU": constants.RU_RU_CHARSET
     }
 
-    CONTENT_MAX_LENGTH = 4096
+    CONTENT_MAX_LENGTH = 1024
 
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -27,6 +27,7 @@ class Exercise(models.Model):
     locale = models.CharField(max_length=4, choices=LOCALES)
     title = models.CharField(max_length=128)
     content = models.CharField(max_length=CONTENT_MAX_LENGTH)
+    attempt_counter = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ('-created_at',)
