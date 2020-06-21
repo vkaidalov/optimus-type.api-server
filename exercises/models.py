@@ -92,3 +92,24 @@ class FastestAttempt(models.Model):
 
     def __str__(self) -> str:
         return str(self.time_spent)
+
+
+class LayoutStatistics(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    layout = models.CharField(max_length=6, choices=Attempt.LAYOUTS)
+    attempt_counter = models.PositiveIntegerField(default=0)
+    input_counter = models.PositiveIntegerField(default=0)
+    mistake_counter = models.PositiveIntegerField(default=0)
+    delay_counter = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ('user', 'layout')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'layout'],
+                name='unique_layout_statistics'
+            )
+        ]
+
+    def __str__(self) -> str:
+        return str(self.id)

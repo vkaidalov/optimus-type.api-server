@@ -1,13 +1,14 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import ExerciseViewSet, AttemptViewSet, FastestAttemptViewSet
+from . import views
 
 
 router = DefaultRouter()
-router.register('exercises', ExerciseViewSet)
-router.register('attempts', AttemptViewSet)
-router.register('fastest-attempts', FastestAttemptViewSet)
+router.register('exercises', views.ExerciseViewSet)
+router.register('attempts', views.AttemptViewSet)
+router.register('fastest-attempts', views.FastestAttemptViewSet)
+router.register('layout-statistics', views.LayoutStatisticsViewSet)
 
 urlpatterns = [
     path('', include(router.urls))
