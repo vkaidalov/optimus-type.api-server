@@ -3,12 +3,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import mixins, viewsets, permissions, filters
 
-from .models import Exercise, Attempt, FastestAttempt
+from .models import Exercise, Attempt, FastestAttempt, LayoutStatistics
 from .serializers import (
     ExerciseSerializer,
     AttemptListItemSerializer,
     AttemptDetailSerializer,
-    FastestAttemptSerializer
+    FastestAttemptSerializer,
+    LayoutStatisticsSerializer
 )
 from .permissions import IsCreatorOrReadOnly
 
@@ -104,3 +105,18 @@ class FastestAttemptViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filterset_fields = ('exercise',)
     ordering_fields = ('time_spent',)
+
+
+@method_decorator(
+    name='list', decorator=swagger_auto_schema(tags=['statistics'])
+)
+@method_decorator(
+    name='retrieve', decorator=swagger_auto_schema(tags=['statistics'])
+)
+class LayoutStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = LayoutStatistics.objects.all()
+    serializer_class = LayoutStatisticsSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filterset_fields = ('user',)
+    ordering_fields = ('layout',)

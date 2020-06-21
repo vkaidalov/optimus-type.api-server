@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 from users.models import User
 from . import validators
-from .models import Exercise, Attempt, FastestAttempt
+from .models import Exercise, Attempt, FastestAttempt, LayoutStatistics
 
 
 class CreatorSerializer(serializers.ModelSerializer):
@@ -138,6 +138,7 @@ class AttemptDetailSerializer(AttemptListItemSerializer):
     def create(self, validated_data):
         # Set the `time_spent` field on the server side.
         input_time_logs: List[int] = validated_data['input_time_logs']
+        mistake_char_logs: str = validated_data['mistake_char_logs']
         time_spent = input_time_logs[-1] - input_time_logs[0]
 
         exercise: Exercise = validated_data['exercise']
@@ -153,6 +154,22 @@ class AttemptDetailSerializer(AttemptListItemSerializer):
                 creator=creator, exercise=exercise, time_spent=time_spent
             )
 
+        layout: str = validated_data['layout']
+        try:
+            layout_stats = LayoutStatistics.objects.get(
+                user=creator, layout=layout
+            )
+        except LayoutStatistics.DoesNotExist:
+            layout_stats = LayoutStatistics(
+                user=creator, layout=layout
+            )
+            # Save and initialize with zeroes to use F() below.
+            layout_stats.save()
+        layout_stats.attempt_counter = F('attempt_counter') + 1
+        layout_stats.input_counter = F('input_counter') + len(exercise.content)
+        layout_stats.mistake_counter = F('mistake_counter') + len(mistake_char_logs)
+        layout_stats.delay_counter = F('delay_counter') + time_spent
+
         with transaction.atomic():
             exercise.save()
             attempt = Attempt.objects.create(time_spent=time_spent, **validated_data)
@@ -162,6 +179,7 @@ class AttemptDetailSerializer(AttemptListItemSerializer):
                 fastest_attempt.time_spent = time_spent
                 fastest_attempt.attempt = attempt
                 fastest_attempt.save()
+            layout_stats.save()
 
         return attempt
 
@@ -172,4 +190,13 @@ class FastestAttemptSerializer(serializers.ModelSerializer):
     class Meta:
         model = FastestAttempt
         fields = ('id', 'creator', 'exercise', 'time_spent')
+        read_only_fields = fields
+
+
+class LayoutStatisticsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LayoutStatistics
+        fields = ('id', 'user', 'layout',
+                  'attempt_counter', 'input_counter',
+                  'mistake_counter', 'delay_counter')
         read_only_fields = fields
