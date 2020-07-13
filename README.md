@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/hesoyam11/optimus-type.api-server.svg?branch=master)](https://travis-ci.org/hesoyam11/optimus-type.api-server)
 [![codecov](https://codecov.io/gh/hesoyam11/optimus-type.api-server/branch/master/graph/badge.svg)](https://codecov.io/gh/hesoyam11/optimus-type.api-server)
+[![Heroku](http://heroku-badge.herokuapp.com/?app=optimus-type&svg=1&root=/v1.0/swagger/)](https://optimus-type.herokuapp.com/v1.0/swagger/)
 
 ## Setup development environment
 
