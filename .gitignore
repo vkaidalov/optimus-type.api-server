@@ -130,3 +130,6 @@ dmypy.json
 
 # IDEA
 .idea/
+
+# Django's STATIC_ROOT where static files are collected after `collectstatic`
+staticfiles/
