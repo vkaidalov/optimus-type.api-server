@@ -10,6 +10,8 @@ env:
   global:
   - PIP_CACHE_DIR=$HOME/.cache/pip
   - PIPENV_CACHE_DIR=$HOME/.cache/pipenv
+  - PIPENV_VENV_IN_PROJECT=1
+  - PIPENV_IGNORE_VIRTUALENVS=1
   - SECRET_KEY=super_secret_key
   - DEBUG=on
   - DATABASE_URL=psql://optimus_type_admin:optimus_type@127.0.0.1:5432/optimus_type
