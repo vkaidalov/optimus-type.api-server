@@ -2,33 +2,37 @@ sudo: required
 dist: bionic
 language: python
 python: 3.8
+
 services:
 - postgresql
 addons:
   postgresql: '11'
+
 env:
   global:
   - PIP_CACHE_DIR=$HOME/.cache/pip
-  - PIPENV_CACHE_DIR=$HOME/.cache/pipenv
-  - PIPENV_VENV_IN_PROJECT=1
-  - PIPENV_IGNORE_VIRTUALENVS=1
   - SECRET_KEY=super_secret_key
   - DEBUG=on
   - DATABASE_URL=psql://optimus_type_admin:optimus_type@127.0.0.1:5432/optimus_type
+
 cache:
   directories:
   - "$PIP_CACHE_DIR"
-  - "$PIPENV_CACHE_DIR"
+
 install:
 - pip install pipenv
-- pipenv install --dev
+- pipenv install --deploy --ignore-pipfile --dev
+
 before_script:
 - psql -U postgres -f setup_db_and_user_for_travis.sql
 - pipenv run migrate
+
 script:
 - pipenv run pytest --cov=.
+
 after_success:
 - codecov
+
 deploy:
   provider: heroku
   api_key:
